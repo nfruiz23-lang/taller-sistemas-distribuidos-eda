@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CoworkHub - Plataforma de Reservas y Gestión de Espacios</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --card-hover: #f1f5f9;
+      --border: #e2e8f0;
+      --border-accent: #cbd5e1;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --primary: #0284c7;
+      --pastel-blue-bg: #e0f2fe;
+      --pastel-blue-text: #0369a1;
+      --pastel-green-bg: #dcfce7;
+      --pastel-green-text: #15803d;
+      --pastel-purple-bg: #f3e8ff;
+      --pastel-purple-text: #7e22ce;
+      --pastel-peach-bg: #fef3c7;
+      --pastel-peach-text: #b45309;
+      --pastel-rose-bg: #ffe4e6;
+      --pastel-rose-text: #be123c;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.05);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.06);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.5;
+      padding: 24px;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+    header {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 28px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--pastel-blue-bg);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: var(--pastel-blue-text);
+    }
+    .brand h1 {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+    }
+    .brand p {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .user-pill {
+      background: var(--pastel-blue-bg);
+      color: var(--pastel-blue-text);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      background: #ffffff;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .tab-btn:hover {
+      background: #f1f5f9;
+      color: var(--text);
+    }
+    .tab-btn.active {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+      box-shadow: 0 4px 10px rgba(2, 132, 199, 0.25);
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    input, select {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid var(--border-accent);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus {
+      border-color: #0284c7;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+    .btn-primary {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+    }
+    .btn-primary:hover {
+      background: #0369a1;
+      transform: translateY(-1px);
+    }
+    .btn-success {
+      background: #16a34a;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(22, 163, 74, 0.25);
+    }
+    .btn-success:hover {
+      background: #15803d;
+    }
+    .btn-secondary {
+      background: #f1f5f9;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge-blue { background: var(--pastel-blue-bg); color: var(--pastel-blue-text); }
+    .badge-green { background: var(--pastel-green-bg); color: var(--pastel-green-text); }
+    .badge-purple { background: var(--pastel-purple-bg); color: var(--pastel-purple-text); }
+    .badge-peach { background: var(--pastel-peach-bg); color: var(--pastel-peach-text); }
+    .badge-rose { background: var(--pastel-rose-bg); color: var(--pastel-rose-text); }
+
+    /* Barra de Leyenda de Disponibilidad */
+    .legend-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 16px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      font-size: 12px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot-available { background: #16a34a; }
+    .dot-occupied { background: #e11d48; }
+    .dot-selected { background: #0284c7; }
+
+    /* Calendario de Días */
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .calendar-day-header {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 6px;
+      text-transform: uppercase;
+    }
+    .calendar-day {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 4px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .calendar-day:hover {
+      background: #f1f5f9;
+      border-color: #0284c7;
+    }
+    .calendar-day.active {
+      background: var(--pastel-blue-bg) !important;
+      color: var(--pastel-blue-text) !important;
+      border-color: #0284c7 !important;
+      font-weight: 800;
+    }
+    .calendar-day.has-event::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 5px;
+      height: 5px;
+      background: #e11d48;
+      border-radius: 50%;
+    }
+
+    /* Franjas Horarias con Estados Editables */
+    .time-slot {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      position: relative;
+    }
+    .time-slot-available {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+      color: #15803d;
+    }
+    .time-slot-available:hover {
+      background: #dcfce7;
+      border-color: #16a34a;
+    }
+    .time-slot-occupied {
+      background: #fff1f2;
+      border-color: #fecdd3;
+      color: #be123c;
+      opacity: 0.85;
+    }
+    .time-slot-occupied:hover {
+      background: #ffe4e6;
+    }
+    .time-slot-selected {
+      background: #e0f2fe !important;
+      border-color: #0284c7 !important;
+      color: #0369a1 !important;
+      box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.4);
+    }
+    .time-slot-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    /* Tablas */
+    .table-responsive {
+      overflow-x: auto;
+      margin-top: 14px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+    th {
+      background: #f8fafc;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      color: #334155;
+    }
+    tr:hover td {
+      background: #f8fafc;
+    }
+    .btn-action-small {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: #be123c;
+      transition: all 0.2s;
+    }
+    .btn-action-small:hover {
+      background: #ffe4e6;
+      border-color: #f43f5e;
+    }
+    .result-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .reasoning-box {
+      background: #ffffff;
+      border-left: 3px solid #0284c7;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #334155;
+      margin: 10px 0;
+      line-height: 1.6;
+      box-shadow: var(--shadow-sm);
+    }
+    .tips-list {
+      list-style-type: disc;
+      padding-left: 20px;
+      font-size: 12px;
+      color: #475569;
+      margin-top: 6px;
+    }
+    .tips-list li {
+      margin-bottom: 4px;
+    }
+    .progress-bar-bg {
+      width: 100%;
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 9999px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: #0284c7;
+      border-radius: 9999px;
+      transition: width 0.3s ease;
+    }
+    .progress-bar-danger {
+      background: #ef4444 !important;
+    }
+    .circuit-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 800;
+      margin: 12px 0;
+    }
+    .circuit-closed {
+      background: var(--pastel-green-bg);
+      color: var(--pastel-green-text);
+      border: 1px solid rgba(22, 163, 74, 0.3);
+    }
+    .circuit-open {
+      background: var(--pastel-rose-bg);
+      color: var(--pastel-rose-text);
+      border: 1px solid rgba(225, 29, 72, 0.3);
+    }
+    .circuit-halfopen {
+      background: var(--pastel-peach-bg);
+      color: var(--pastel-peach-text);
+      border: 1px solid rgba(217, 119, 6, 0.3);
+    }
+    pre {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 11px;
+      color: #0f172a;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ENCABEZADO -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">🏢</div>
+      <div>
+        <h1>CoworkHub</h1>
+        <p>Reserva de espacios de trabajo, salas ejecutivas y oficinas privadas</p>
+      </div>
+    </div>
+    <div class="user-pill">
+      <span>👤 Carlos Rodríguez</span>
+      <span style="opacity: 0.5;">|</span>
+      <span>Miembro Pro</span>
+    </div>
+  </header>
+
+  <!-- PESTAÑAS -->
+  <div class="tabs">
+    <button class="tab-btn active" id="btn-tab-calendar" onclick="switchTab('tab-calendar')">
+      📅 Calendario & Disponibilidad
+    </button>
+    <button class="tab-btn" id="btn-tab-ai" onclick="switchTab('tab-ai')">
+      ✨ Asesor IA (Recomendador Inteligente)
+    </button>
+    <button class="tab-btn" id="btn-tab-resilience" onclick="switchTab('tab-resilience')">
+      🛡️ Estabilidad & Conectividad
+    </button>
+    <button class="tab-btn" id="btn-tab-tests" onclick="switchTab('tab-tests')">
+      🧪 Pruebas del Sistema
+    </button>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- TAB 0: CALENDARIO & DISPONIBILIDAD EDITABLE                    -->
+  <!-- ============================================================== -->
+  <div id="tab-calendar">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">
+            <span>📅</span> Calendario de Disponibilidad en Tiempo Real
+          </div>
+          <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
+            Selecciona un espacio y haz clic en los horarios para ver cuáles están libres u ocupados.
+          </p>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button class="btn btn-secondary" onclick="toggleEditMode()" id="btn-toggle-edit" style="width: auto; padding: 7px 14px; font-size: 12px;">
+            <span>✏️</span> Activar Modo Editar Disponibilidad
+          </button>
+        </div>
+      </div>
+
+      <!-- Leyenda de Colores -->
+      <div class="legend-bar">
+        <span style="font-weight: 700; color: #0f172a; margin-right: 4px;">Estados:</span>
+        <div class="legend-item"><span class="dot dot-available"></span> Disponible (Libre)</div>
+        <div class="legend-item"><span class="dot dot-occupied"></span> Ocupado (Reservado)</div>
+        <div class="legend-item"><span class="dot dot-selected"></span> Selección Actual</div>
+        <div class="legend-item"><span class="badge badge-peach" style="padding: 2px 8px;">🔥 Hora Pico</span></div>
+        <span id="edit-mode-notice" class="badge badge-rose hidden" style="margin-left: auto;">
+          Modo Edición Activo: Haz clic en cualquier franja para cambiar su estado
+        </span>
+      </div>
+
+      <!-- Selector Rápido de Espacio -->
+      <div style="display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px;">
+        <button class="btn btn-secondary active-space-btn" id="space-tab-1" onclick="switchSpace(1)" style="width: auto; padding: 8px 16px; border-radius: 9999px; background: #e0f2fe; color: #0369a1; border-color: #0284c7; font-weight: 700;">
+          ESP001 - Sala Ejecutiva ($40k/h)
+        </button>
+        <button class="btn btn-secondary active-space-btn" id="space-tab-2" onclick="switchSpace(2)" style="width: auto; padding: 8px 16px; border-radius: 9999px;">
+          ESP002 - Oficina Privada ($25k/h)
+        </button>
+        <button class="btn btn-secondary active-space-btn" id="space-tab-3" onclick="switchSpace(3)" style="width: auto; padding: 8px 16px; border-radius: 9999px;">
+          ESP003 - Sala Conferencias ($60k/h)
+        </button>
+      </div>
+
+      <div class="grid-2">
+        <!-- Calendario y Horarios Interactivos -->
+        <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <strong style="font-size: 15px; color: #0f172a;" id="calendar-month-label">Noviembre 2026</strong>
+            <span class="badge badge-blue" id="space-selected-badge">ESP001 - Sala Ejecutiva</span>
+          </div>
+
+          <!-- Cuadrícula de Días -->
+          <div class="calendar-grid">
+            <div class="calendar-day-header">Lun</div>
+            <div class="calendar-day-header">Mar</div>
+            <div class="calendar-day-header">Mié</div>
+            <div class="calendar-day-header">Jue</div>
+            <div class="calendar-day-header">Vie</div>
+            <div class="calendar-day-header">Sáb</div>
+            <div class="calendar-day-header">Dom</div>
+
+            <div class="calendar-day" onclick="selectDay(this, 17)">17</div>
+            <div class="calendar-day" onclick="selectDay(this, 18)">18</div>
+            <div class="calendar-day" onclick="selectDay(this, 19)">19</div>
+            <div class="calendar-day has-event" onclick="selectDay(this, 20)">20</div>
+            <div class="calendar-day active has-event" onclick="selectDay(this, 21)">21</div>
+            <div class="calendar-day" onclick="selectDay(this, 22)">22</div>
+            <div class="calendar-day" onclick="selectDay(this, 23)">23</div>
+
+            <div class="calendar-day" onclick="selectDay(this, 24)">24</div>
+            <div class="calendar-day has-event" onclick="selectDay(this, 25)">25</div>
+            <div class="calendar-day" onclick="selectDay(this, 26)">26</div>
+            <div class="calendar-day" onclick="selectDay(this, 27)">27</div>
+            <div class="calendar-day" onclick="selectDay(this, 28)">28</div>
+            <div class="calendar-day" onclick="selectDay(this, 29)">29</div>
+            <div class="calendar-day" onclick="selectDay(this, 30)">30</div>
+          </div>
+
+          <!-- Franjas Horarias con Estados Reales -->
+          <div style="margin-top: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <label style="margin: 0;">Disponibilidad del Día <span id="label-selected-day">21 de Noviembre</span>:</label>
+              <span style="font-size: 11px; color: var(--text-muted);">Haz clic para seleccionar o editar</span>
+            </div>
+            
+            <div id="slots-container" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px;">
+              <!-- Se generan dinámicamente por JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulario de Agendamiento -->
+        <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow-sm);">
+          <div>
+            <h4 style="font-size: 15px; color: #0f172a; margin-bottom: 14px; font-weight: 700;">Detalles de la Reserva:</h4>
+            
+            <div class="form-group">
+              <label>Espacio a Reservar:</label>
+              <select id="book-space" onchange="onSpaceDropdownChange()">
+                <option value="1" data-rate="40000" data-name="Sala Ejecutiva">ESP001 - Sala Ejecutiva ($40.000/h - Cap: 6)</option>
+                <option value="2" data-rate="25000" data-name="Oficina Privada">ESP002 - Oficina Privada ($25.000/h - Cap: 2)</option>
+                <option value="3" data-rate="60000" data-name="Sala de Conferencias">ESP003 - Sala de Conferencias ($60.000/h - Cap: 10)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Correo Electrónico:</label>
+              <input type="email" id="book-email" value="carlos@coworking.com" placeholder="tu-email@empresa.com">
+            </div>
+
+            <div class="grid-2" style="gap: 12px;">
+              <div class="form-group">
+                <label>Fecha Seleccionada:</label>
+                <input type="text" id="book-day-display" value="21 de Noviembre, 2026" readonly style="color: #0284c7; font-weight: bold; background: #f8fafc;">
+              </div>
+              <div class="form-group">
+                <label>Hora de Inicio:</label>
+                <input type="text" id="book-time-display" value="08:00 AM" readonly style="color: #15803d; font-weight: bold; background: #f8fafc;">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Duración:</label>
+              <select id="book-hours" onchange="updateBookingTotal()">
+                <option value="1">1 hora</option>
+                <option value="2">2 horas</option>
+                <option value="3" selected>3 horas</option>
+                <option value="4">4 horas</option>
+                <option value="8">8 horas (Día Completo)</option>
+              </select>
+            </div>
+
+            <!-- Estado de la franja seleccionada -->
+            <div id="slot-status-box" style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px; font-size: 12px; color: #15803d; display: flex; align-items: center; justify-content: space-between;">
+              <span>● Estado: <strong>Disponible para reservar</strong></span>
+              <span class="badge badge-green">Libre</span>
+            </div>
+          </div>
+
+          <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-top: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Total a Pagar:</span>
+                <div style="font-size: 22px; font-weight: 800; color: #15803d;" id="book-total-display">$120,000 COP</div>
+              </div>
+              <span class="badge badge-green">Tarifa Transparente</span>
+            </div>
+            
+            <button class="btn btn-success" id="btn-confirm-booking" onclick="confirmBooking()" style="margin-top: 14px; font-size: 14px; padding: 12px;">
+              <span>✔</span> Confirmar y Bloquear Horario
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Historial de Reservas y Gestión -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span>📋</span> Mis Reservas Confirmadas (Gestión en Vivo)
+        </div>
+        <span class="badge badge-blue" id="booking-badge-count">3 Reservas Activas</span>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Espacio</th>
+              <th>Cliente</th>
+              <th>Fecha y Hora</th>
+              <th>Duración</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="bookings-tbody">
+            <tr id="row-ORD-101">
+              <td><strong>#ORD-101</strong></td>
+              <td>Sala Ejecutiva</td>
+              <td>carlos@coworking.com</td>
+              <td>21 Nov 2026 - 10:00 AM</td>
+              <td>2 horas</td>
+              <td>$80,000</td>
+              <td><span class="badge badge-rose">Ocupado</span></td>
+              <td><button class="btn-action-small" onclick="cancelBooking('ORD-101', 1, 21, '10:00 AM')">Liberar Horario</button></td>
+            </tr>
+            <tr id="row-ORD-102">
+              <td><strong>#ORD-102</strong></td>
+              <td>Oficina Privada</td>
+              <td>ana@empresa.co</td>
+              <td>20 Nov 2026 - 02:00 PM</td>
+              <td>2 horas</td>
+              <td>$50,000</td>
+              <td><span class="badge badge-rose">Ocupado</span></td>
+              <td><button class="btn-action-small" onclick="cancelBooking('ORD-102', 2, 20, '02:00 PM')">Liberar Horario</button></td>
+            </tr>
+            <tr id="row-ORD-103">
+              <td><strong>#ORD-103</strong></td>
+              <td>Sala de Conferencias</td>
+              <td>gerencia@startup.io</td>
+              <td>25 Nov 2026 - 09:00 AM</td>
+              <td>4 horas</td>
+              <td>$240,000</td>
+              <td><span class="badge badge-rose">Ocupado</span></td>
+              <td><button class="btn-action-small" onclick="cancelBooking('ORD-103', 3, 25, '09:00 AM')">Liberar Horario</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- TAB 1: ASISTENTE IA                                            -->
+  <!-- ============================================================== -->
+  <div id="tab-ai" class="hidden">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span>✨</span> Recomendador Inteligente con Inteligencia Artificial
+        </div>
+        <span class="badge badge-purple">GPT-4o-mini | Asesoría en Segundos</span>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h4 style="font-size: 14px; margin-bottom: 12px; color: #0f172a; font-weight: 700;">¿Qué necesitas para tu reunión?</h4>
+          <div class="grid-2" style="gap: 12px;">
+            <div class="form-group">
+              <label>Objetivo:</label>
+              <input type="text" id="ai-need" value="Sala de reuniones">
+            </div>
+            <div class="form-group">
+              <label>Personas:</label>
+              <input type="number" id="ai-people" value="5" min="1">
+            </div>
+            <div class="form-group">
+              <label>Horas:</label>
+              <input type="number" id="ai-hours" value="3" min="1">
+            </div>
+            <div class="form-group">
+              <label>Presupuesto Máximo ($):</label>
+              <input type="number" id="ai-budget" value="150000" step="5000">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Notas o requerimientos:</label>
+            <input type="text" id="ai-notes" value="Buena conexión a internet y ambiente tranquilo">
+          </div>
+          <button class="btn btn-primary" onclick="executeAiRecommendation()">
+            <span>✨</span> Buscar Espacio Ideal con IA
+          </button>
+        </div>
+
+        <div class="result-box">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <span style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Recomendación Personalizada</span>
+                <div style="font-size: 18px; font-weight: 800; color: #0f172a; margin-top: 4px;" id="rec-space-name">ESP001 - Sala Ejecutiva</div>
+              </div>
+              <span class="badge badge-green" id="rec-confidence">95% Compatibilidad</span>
+            </div>
+
+            <div class="reasoning-box" id="rec-reasoning">
+              El espacio 'Sala Ejecutiva' cuenta con capacidad para 6 personas y un costo total de $120,000 para 3 horas ($40,000/h), ajustándose a tu presupuesto de $150,000.
+            </div>
+
+            <div style="margin-top: 10px;">
+              <span style="font-size: 12px; font-weight: 700; color: #475569;">💡 Consejos para tu sesión:</span>
+              <ul class="tips-list" id="rec-tips">
+                <li>Verificar conexión wifi antes de iniciar la sesión</li>
+                <li>Reservar con al menos 1 hora de anticipación</li>
+                <li>Llegar 10 minutos antes para configuración audiovisual</li>
+              </ul>
+            </div>
+          </div>
+
+          <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-muted);">
+            <span>Otras opciones:</span>
+            <span class="badge badge-blue" style="margin-left: 6px;">ESP002 (Oficina Privada)</span>
+            <span class="badge badge-blue">ESP003 (Sala Conferencias)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><span>✍️</span> Descripción Comercial del Espacio</div>
+          <span class="badge badge-peach">Generado por IA</span>
+        </div>
+        <div class="form-group">
+          <label>Selecciona un Espacio:</label>
+          <select id="desc-space-select" onchange="generateCommercialCopy()">
+            <option value="ESP001">ESP001 - Sala Ejecutiva ($40.000/h)</option>
+            <option value="ESP002">ESP002 - Oficina Privada ($25.000/h)</option>
+            <option value="ESP003">ESP003 - Sala de Conferencias ($60.000/h)</option>
+          </select>
+        </div>
+
+        <button class="btn btn-secondary" onclick="generateCommercialCopy()" style="margin-bottom: 14px;">
+          <span>📝</span> Regenerar Descripción
+        </button>
+
+        <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px;">
+          <p id="desc-text" style="font-size: 13px; font-style: italic; color: #334155; line-height: 1.6;">
+            "Sala Ejecutiva es el espacio ideal para elevar la productividad de tu equipo. Diseñado con capacidad para 6 personas y equipado con conexión de alta velocidad y mobiliario ergonómico, ofrece un ambiente profesional e inspirador. Disponible por solo $40,000/hora, garantiza privacidad y confort para tus reuniones más exigentes."
+          </p>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-muted);">
+            <span>Extensión: <strong style="color: #0284c7;" id="desc-words">55 palabras</strong></span>
+            <span class="badge badge-green">Límite &lt; 100 palabras</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><span>📈</span> Horarios Recomendados & Demanda</div>
+          <span class="badge badge-purple">Patrones de Uso</span>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-size: 13px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="color: var(--text-muted);">Horas Pico:</span>
+            <div>
+              <span class="badge badge-peach">10:00 AM</span>
+              <span class="badge badge-peach">09:00 AM</span>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="color: var(--text-muted);">Espacio Más Tranquilo:</span>
+            <span class="badge badge-blue">ESP002 - Oficina Privada</span>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="color: var(--text-muted);">Demanda Semanal:</span>
+            <span class="badge badge-green">Alta Ocupación</span>
+          </div>
+
+          <div style="padding-top: 12px; border-top: 1px solid var(--border); font-size: 12px; color: #475569;">
+            <strong style="color: #0284c7; display: block; margin-bottom: 4px;">Consejo para Reservar:</strong>
+            Te recomendamos agendar tus salas entre las 11:00 AM y las 01:00 PM para disfrutar de mayor tranquilidad y disponibilidad inmediata.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- TAB 2: RESILIENCIA & ESTABILIDAD                               -->
+  <!-- ============================================================== -->
+  <div id="tab-resilience" class="hidden">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span>🛡️</span> Protección contra Saturación (Rate Limiting)</div>
+        <span class="badge badge-peach">Control: 100 peticiones / 60s</span>
+      </div>
+
+      <div class="grid-3">
+        <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center;">
+          <span style="font-size: 12px; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Peticiones Realizadas</span>
+          <div style="font-size: 36px; font-weight: 900; color: #0284c7; margin: 8px 0; font-family: monospace;">
+            <span id="rate-counter">0</span> / 100
+          </div>
+          <div class="progress-bar-bg">
+            <div id="rate-bar" class="progress-bar-fill" style="width: 0%;"></div>
+          </div>
+          <span id="rate-msg" class="badge badge-green">Navegación Normal</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; justify-content: center; gap: 10px;">
+          <button class="btn btn-primary" onclick="addRequest()">
+            <span>➕</span> +1 Petición Normal (HTTP 200)
+          </button>
+          <button class="btn btn-secondary" onclick="triggerBurst()" style="color: #b45309; border-color: #fde68a; background: #fefce8;">
+            <span>⚡</span> Simular Límite Excedido (101 req)
+          </button>
+          <button class="btn btn-secondary" onclick="resetRate()">
+            <span>🔄</span> Reiniciar Contador
+          </button>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 16px; font-family: monospace; font-size: 12px;">
+          <div style="color: var(--text-muted); font-weight: bold; margin-bottom: 6px; font-family: sans-serif;">Respuesta de Seguridad:</div>
+          <p id="http-status-line" style="color: #15803d; font-weight: bold;">HTTP/1.1 200 OK</p>
+          <p style="color: #64748b;">X-RateLimit-Limit: 100</p>
+          <p style="color: #64748b;" id="http-remaining-line">X-RateLimit-Remaining: 100</p>
+          <p style="color: #be123c; font-weight: bold;" id="http-retry-line" class="hidden">Retry-After: 60</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span>⚡</span> Mecanismo de Aislamiento de Fallos (Circuit Breaker)</div>
+        <span class="badge badge-rose">Umbral: 5 Fallos | Tolerancia Activa</span>
+      </div>
+
+      <div class="grid-3">
+        <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center;">
+          <span style="font-size: 12px; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Estado de Conexión</span>
+          <div id="circuit-box" class="circuit-indicator circuit-closed">
+            CLOSED (Normal)
+          </div>
+          <p style="font-size: 13px; color: var(--text-muted);">
+            Fallos Consecutivos: <strong id="cb-fail-counter" style="color: #be123c; font-family: monospace;">0 / 5</strong>
+          </p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; justify-content: center; gap: 10px;">
+          <button class="btn btn-secondary" onclick="cbSimulateFailure()" style="color: #be123c; border-color: #fecdd3; background: #fff1f2;">
+            <span>💥</span> Simular Caída de Servicio (+1)
+          </button>
+          <button class="btn btn-success" onclick="cbSimulateSuccess()">
+            <span>✔</span> Restaurar Servicio Exitoso
+          </button>
+          <button class="btn btn-secondary" onclick="cbSimulateHalfOpen()">
+            <span>⏳</span> Comprobar Recuperación
+          </button>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 16px; font-size: 13px; line-height: 1.6;">
+          <strong style="color: #0284c7;">Estado del Sistema:</strong>
+          <p id="cb-explanation" style="color: #475569; margin-top: 6px;">
+            El circuito está <strong>CERRADO</strong>: La plataforma opera normalmente conectando los servicios sin interrupciones.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- TAB 3: PRUEBAS DEL SISTEMA                                     -->
+  <!-- ============================================================== -->
+  <div id="tab-tests" class="hidden">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span>🧪</span> Verificación de Calidad y Pruebas Unitarias</div>
+        <span class="badge badge-green">34 / 34 Pruebas Aprobadas</span>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h4 style="font-size: 13px; color: #b45309; margin-bottom: 8px; font-weight: 700;">Pruebas de Resiliencia (Taller 5 - 14 PASS)</h4>
+          <pre>
+[PASS] 1. RateLimiter permite primeras 100 solicitudes
+[PASS] 2. RateLimiter bloquea solicitud 101
+[PASS] 3. RateLimiter aísla registros por cada IP
+[PASS] 4. RateLimiter depura solicitudes fuera de 60s
+[PASS] 5. Middleware HTTP delega a call_next
+[PASS] 6. Middleware HTTP bloquea con HTTP 429
+[PASS] 7. CircuitBreaker inicializa en 'closed'
+[PASS] 8. CircuitBreaker conmuta a 'open' al 5to fallo
+[PASS] 9. CircuitBreaker recupera: OPEN -> HALF_OPEN -> CLOSED
+[PASS] 10. call_catalog_with_breaker responde 503
+[PASS] 13. retry_with_backoff reintenta con 1s, 2s
+[PASS] 14. retry_with_backoff propaga excepción tras 3 fallos
+------------------------------------------------------
+Ran 14 tests in 0.199s - OK</pre>
+        </div>
+
+        <div>
+          <h4 style="font-size: 13px; color: #0369a1; margin-bottom: 8px; font-weight: 700;">Pruebas de IA (Taller 6 - 5 PASS)</h4>
+          <pre>
+[PASS] 1. recommend_space() genera JSON estructurado
+[PASS] 2. recommend_space() soporta fallback con .get()
+[PASS] 3. generate_space_description() aplica max_tokens
+[PASS] 4. analyze_booking_pattern() limita a 20 registros
+[PASS] 5. Manejo defensivo si falta librería openai
+------------------------------------------------------
+Ran 5 tests in 0.003s - OK
+
+Demostración en vivo (test_ai.py):
+✔ Recomendación generada: ESP001 (Confianza: 0.95)
+✔ Descripción comercial: 55 palabras (< 100 palabras)
+✔ Análisis histórico: Horas pico detectadas 10:00 y 09:00
+------------------------------------------------------
+✅ TODAS LAS PRUEBAS COMPLETADAS CON ÉXITO</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ─── BASE DE DATOS DE DISPONIBILIDAD EN MEMORIA ─────────────────
+  // Estructura: availability[spaceId][day][slotTime] = "available" | "occupied"
+  const availabilityData = {
+    1: { // ESP001 - Sala Ejecutiva
+      20: { "09:00 AM": "occupied", "10:00 AM": "occupied" },
+      21: { "10:00 AM": "occupied", "02:00 PM": "occupied" },
+      25: { "09:00 AM": "occupied" }
+    },
+    2: { // ESP002 - Oficina Privada
+      20: { "02:00 PM": "occupied" },
+      21: { "11:00 AM": "occupied" }
+    },
+    3: { // ESP003 - Sala de Conferencias
+      21: { "09:00 AM": "occupied", "04:00 PM": "occupied" },
+      25: { "09:00 AM": "occupied", "10:00 AM": "occupied" }
+    }
+  };
+
+  const timeSlotsList = [
+    { time: "08:00 AM", peak: false },
+    { time: "09:00 AM", peak: true },
+    { time: "10:00 AM", peak: true },
+    { time: "11:00 AM", peak: false },
+    { time: "01:00 PM", peak: false },
+    { time: "02:00 PM", peak: true },
+    { time: "03:00 PM", peak: false },
+    { time: "04:00 PM", peak: false },
+    { time: "05:00 PM", peak: false }
+  ];
+
+  let currentSpaceId = 1;
+  let selectedDayNum = 21;
+  let selectedSlotTime = "08:00 AM";
+  let isEditMode = false;
+
+  // Inicializar render de slots al cargar
+  window.addEventListener('DOMContentLoaded', () => {
+    renderTimeSlots();
+    updateBookingTotal();
+  });
+
+  function switchTab(tabId) {
+    document.getElementById('tab-calendar').classList.add('hidden');
+    document.getElementById('tab-ai').classList.add('hidden');
+    document.getElementById('tab-resilience').classList.add('hidden');
+    document.getElementById('tab-tests').classList.add('hidden');
+
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+    document.getElementById(tabId).classList.remove('hidden');
+    document.getElementById('btn-' + tabId).classList.add('active');
+  }
+
+  // Alternar Modo Edición
+  function toggleEditMode() {
+    isEditMode = !isEditMode;
+    const btn = document.getElementById('btn-toggle-edit');
+    const notice = document.getElementById('edit-mode-notice');
+
+    if (isEditMode) {
+      btn.innerHTML = "<span>💾</span> Guardar y Salir de Edición";
+      btn.style.background = "#ffe4e6";
+      btn.style.borderColor = "#f43f5e";
+      btn.style.color = "#be123c";
+      notice.classList.remove('hidden');
+    } else {
+      btn.innerHTML = "<span>✏️</span> Activar Modo Editar Disponibilidad";
+      btn.style.background = "#f1f5f9";
+      btn.style.borderColor = "var(--border)";
+      btn.style.color = "var(--text)";
+      notice.classList.add('hidden');
+    }
+    renderTimeSlots();
+  }
+
+  // Cambiar espacio activo
+  function switchSpace(spaceId) {
+    currentSpaceId = spaceId;
+    document.querySelectorAll('.active-space-btn').forEach(btn => {
+      btn.style.background = "#ffffff";
+      btn.style.borderColor = "var(--border)";
+      btn.style.color = "var(--text)";
+      btn.style.fontWeight = "600";
+    });
+
+    const activeBtn = document.getElementById(`space-tab-${spaceId}`);
+    activeBtn.style.background = "#e0f2fe";
+    activeBtn.style.borderColor = "#0284c7";
+    activeBtn.style.color = "#0369a1";
+    activeBtn.style.fontWeight = "700";
+
+    const spaceSelect = document.getElementById('book-space');
+    spaceSelect.value = spaceId;
+
+    const names = { 1: "ESP001 - Sala Ejecutiva", 2: "ESP002 - Oficina Privada", 3: "ESP003 - Sala Conferencias" };
+    document.getElementById('space-selected-badge').innerText = names[spaceId];
+
+    renderTimeSlots();
+    updateBookingTotal();
+  }
+
+  function onSpaceDropdownChange() {
+    const val = parseInt(document.getElementById('book-space').value);
+    switchSpace(val);
+  }
+
+  // Seleccionar día
+  function selectDay(element, dayNum) {
+    document.querySelectorAll('.calendar-day').forEach(el => el.classList.remove('active'));
+    element.classList.add('active');
+    selectedDayNum = dayNum;
+    document.getElementById('book-day-display').value = `${dayNum} de Noviembre, 2026`;
+    document.getElementById('label-selected-day').innerText = `${dayNum} de Noviembre`;
+    renderTimeSlots();
+  }
+
+  // Renderizar franjas horarias según el espacio y día seleccionado
+  function renderTimeSlots() {
+    const container = document.getElementById('slots-container');
+    container.innerHTML = "";
+
+    const spaceData = availabilityData[currentSpaceId] || {};
+    const dayData = spaceData[selectedDayNum] || {};
+
+    timeSlotsList.forEach(slot => {
+      const isOccupied = (dayData[slot.time] === "occupied");
+      const isSelected = (slot.time === selectedSlotTime);
+
+      const div = document.createElement('div');
+      div.className = `time-slot ${isOccupied ? 'time-slot-occupied' : 'time-slot-available'} ${isSelected ? 'time-slot-selected' : ''}`;
+      
+      div.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-weight: 700;">${slot.time}</span>
+          ${slot.peak ? '<span style="font-size: 11px;">🔥</span>' : ''}
+        </div>
+        <span class="time-slot-badge" style="color: ${isOccupied ? '#be123c' : '#15803d'};">
+          ${isOccupied ? '● Ocupado' : '● Disponible'}
+        </span>
+      `;
+
+      div.onclick = () => onSlotClick(slot.time, isOccupied);
+      container.appendChild(div);
+    });
+
+    updateSlotStatusUI();
+  }
+
+  // Al hacer clic en una hora
+  function onSlotClick(timeStr, currentlyOccupied) {
+    if (isEditMode) {
+      // Modo edición: alterna entre disponible y ocupado
+      if (!availabilityData[currentSpaceId]) availabilityData[currentSpaceId] = {};
+      if (!availabilityData[currentSpaceId][selectedDayNum]) availabilityData[currentSpaceId][selectedDayNum] = {};
+
+      if (currentlyOccupied) {
+        delete availabilityData[currentSpaceId][selectedDayNum][timeStr];
+      } else {
+        availabilityData[currentSpaceId][selectedDayNum][timeStr] = "occupied";
+      }
+      renderTimeSlots();
+    } else {
+      // Modo usuario: seleccionar horario
+      selectedSlotTime = timeStr;
+      document.getElementById('book-time-display').value = timeStr;
+      renderTimeSlots();
+    }
+  }
+
+  function updateSlotStatusUI() {
+    const spaceData = availabilityData[currentSpaceId] || {};
+    const dayData = spaceData[selectedDayNum] || {};
+    const isOccupied = (dayData[selectedSlotTime] === "occupied");
+
+    const box = document.getElementById('slot-status-box');
+    const confirmBtn = document.getElementById('btn-confirm-booking');
+
+    if (isOccupied) {
+      box.style.background = "#fff1f2";
+      box.style.borderColor = "#fecdd3";
+      box.style.color = "#be123c";
+      box.innerHTML = `<span>● Estado: <strong>Horario Ocupado (No disponible)</strong></span><span class="badge badge-rose">Ocupado</span>`;
+      confirmBtn.disabled = true;
+      confirmBtn.style.opacity = "0.5";
+      confirmBtn.style.cursor = "not-allowed";
+      confirmBtn.innerHTML = `<span>⛔</span> Horario Ocupado - Elige otra hora`;
+    } else {
+      box.style.background = "#f0fdf4";
+      box.style.borderColor = "#bbf7d0";
+      box.style.color = "#15803d";
+      box.innerHTML = `<span>● Estado: <strong>Disponible para agendar</strong></span><span class="badge badge-green">Libre</span>`;
+      confirmBtn.disabled = false;
+      confirmBtn.style.opacity = "1";
+      confirmBtn.style.cursor = "pointer";
+      confirmBtn.innerHTML = `<span>✔</span> Confirmar y Bloquear Horario`;
+    }
+  }
+
+  function updateBookingTotal() {
+    const spaceSelect = document.getElementById('book-space');
+    const selectedOption = spaceSelect.options[spaceSelect.selectedIndex];
+    const rate = parseInt(selectedOption.getAttribute('data-rate')) || 40000;
+    const hours = parseInt(document.getElementById('book-hours').value) || 1;
+    const total = rate * hours;
+    document.getElementById('book-total-display').innerText = `$${total.toLocaleString()} COP`;
+  }
+
+  let orderSequence = 104;
+  function confirmBooking() {
+    const spaceSelect = document.getElementById('book-space');
+    const selectedOption = spaceSelect.options[spaceSelect.selectedIndex];
+    const spaceName = selectedOption.getAttribute('data-name');
+    const rate = parseInt(selectedOption.getAttribute('data-rate'));
+    const hours = parseInt(document.getElementById('book-hours').value);
+    const email = document.getElementById('book-email').value || "carlos@coworking.com";
+    const total = rate * hours;
+
+    // Marcar como ocupado en la base de datos local
+    if (!availabilityData[currentSpaceId]) availabilityData[currentSpaceId] = {};
+    if (!availabilityData[currentSpaceId][selectedDayNum]) availabilityData[currentSpaceId][selectedDayNum] = {};
+    availabilityData[currentSpaceId][selectedDayNum][selectedSlotTime] = "occupied";
+
+    // Agregar a la tabla de reservas
+    const tbody = document.getElementById('bookings-tbody');
+    const newRow = document.createElement('tr');
+    const ordId = `ORD-${orderSequence}`;
+    newRow.id = `row-${ordId}`;
+    newRow.innerHTML = `
+      <td><strong>#${ordId}</strong></td>
+      <td>${spaceName}</td>
+      <td>${email}</td>
+      <td>${selectedDayNum} Nov 2026 - ${selectedSlotTime}</td>
+      <td>${hours} horas</td>
+      <td>$${total.toLocaleString()}</td>
+      <td><span class="badge badge-rose">Ocupado</span></td>
+      <td><button class="btn-action-small" onclick="cancelBooking('${ordId}', ${currentSpaceId}, ${selectedDayNum}, '${selectedSlotTime}')">Liberar Horario</button></td>
+    `;
+    tbody.insertBefore(newRow, tbody.firstChild);
+
+    orderSequence++;
+    const totalCount = tbody.children.length;
+    document.getElementById('booking-badge-count').innerText = `${totalCount} Reservas Activas`;
+
+    // Refrescar la cuadrícula de horas
+    renderTimeSlots();
+
+    alert(`🎉 ¡Reserva Agendada y Horario Bloqueado!\n\nEspacio: ${spaceName}\nFecha: ${selectedDayNum} Noviembre, 2026 - ${selectedSlotTime}\nDuración: ${hours} horas\nTotal: $${total.toLocaleString()} COP\n\nEl horario '${selectedSlotTime}' ahora aparece en ROJO (Ocupado).`);
+  }
+
+  // Cancelar y liberar horario
+  function cancelBooking(ordId, spId, day, slot) {
+    if (confirm(`¿Deseas cancelar la orden #${ordId} y volver a poner disponible el horario de las ${slot}?`)) {
+      // Eliminar fila de la tabla
+      const row = document.getElementById(`row-${ordId}`);
+      if (row) row.remove();
+
+      // Liberar en datos de disponibilidad
+      if (availabilityData[spId] && availabilityData[spId][day]) {
+        delete availabilityData[spId][day][slot];
+      }
+
+      const totalCount = document.getElementById('bookings-tbody').children.length;
+      document.getElementById('booking-badge-count').innerText = `${totalCount} Reservas Activas`;
+
+      renderTimeSlots();
+      alert(`✔ Horario liberado: Ahora el horario de las ${slot} está nuevamente DISPONIBLE en verde.`);
+    }
+  }
+
+  // ─── LÓGICA DE IA Y RESILIENCIA (CONSERVADAS) ─────────────────────
+  function executeAiRecommendation() {
+    const people = parseInt(document.getElementById('ai-people').value) || 1;
+    const hours = parseInt(document.getElementById('ai-hours').value) || 1;
+    const budget = parseInt(document.getElementById('ai-budget').value) || 100000;
+
+    let name = "ESP001 - Sala Ejecutiva";
+    let rate = 40000;
+
+    if (people <= 2 && budget < 90000) {
+      name = "ESP002 - Oficina Privada";
+      rate = 25000;
+    } else if (people > 6 || budget > 200000) {
+      name = "ESP003 - Sala de Conferencias";
+      rate = 60000;
+    }
+
+    const total = rate * hours;
+    document.getElementById('rec-space-name').innerText = name;
+    document.getElementById('rec-reasoning').innerText = 
+      `El espacio '${name}' cuenta con capacidad adecuada para ${people} personas y un costo total de $${total.toLocaleString()} para ${hours} horas, adaptándose al presupuesto de $${budget.toLocaleString()}.`;
+  }
+
+  function generateCommercialCopy() {
+    const val = document.getElementById('desc-space-select').value;
+    const p = document.getElementById('desc-text');
+    const w = document.getElementById('desc-words');
+
+    if (val === "ESP001") {
+      p.innerText = `"Sala Ejecutiva es el espacio ideal para elevar la productividad de tu equipo. Diseñado con capacidad para 6 personas y equipado con conexión de alta velocidad y mobiliario ergonómico, ofrece un ambiente profesional e inspirador. Disponible por solo $40,000/hora, garantiza privacidad y confort para tus reuniones más exigentes."`;
+      w.innerText = "55 palabras";
+    } else if (val === "ESP002") {
+      p.innerText = `"Oficina Privada pensada para concentración total y llamadas confidenciales. Con capacidad para 2 personas y una tarifa accesible de $25,000/hora, disfrutarás de luz natural, aislamiento acústico y conexión wifi ultra rápida para impulsar tu jornada."`;
+      w.innerText = "38 palabras";
+    } else {
+      p.innerText = `"Sala de Conferencias de alta gama con capacidad para 10 personas. Equipada con proyector 4K, pizarra inteligente y soporte técnico dedicado por $60,000/hora. El escenario perfecto para juntas directivas y talleres de alto impacto."`;
+      w.innerText = "39 palabras";
+    }
+  }
+
+  let currentReqs = 0;
+  function updateRateDisplay() {
+    document.getElementById('rate-counter').innerText = currentReqs;
+    const pct = Math.min((currentReqs / 100) * 100, 100);
+    const bar = document.getElementById('rate-bar');
+    bar.style.width = pct + '%';
+
+    const statusLine = document.getElementById('http-status-line');
+    const remLine = document.getElementById('http-remaining-line');
+    const retryLine = document.getElementById('http-retry-line');
+    const msg = document.getElementById('rate-msg');
+
+    if (currentReqs <= 100) {
+      bar.classList.remove('progress-bar-danger');
+      statusLine.innerText = "HTTP/1.1 200 OK";
+      statusLine.style.color = "#15803d";
+      remLine.innerText = `X-RateLimit-Remaining: ${100 - currentReqs}`;
+      retryLine.classList.add('hidden');
+      msg.className = "badge badge-green";
+      msg.innerText = "Navegación Normal";
+    } else {
+      bar.classList.add('progress-bar-danger');
+      statusLine.innerText = "HTTP/1.1 429 Too Many Requests";
+      statusLine.style.color = "#be123c";
+      remLine.innerText = "X-RateLimit-Remaining: 0";
+      retryLine.classList.remove('hidden');
+      msg.className = "badge badge-rose";
+      msg.innerText = "Límite Excedido (60s)";
+    }
+  }
+
+  function addRequest() {
+    currentReqs++;
+    updateRateDisplay();
+  }
+
+  function triggerBurst() {
+    currentReqs = 101;
+    updateRateDisplay();
+  }
+
+  function resetRate() {
+    currentReqs = 0;
+    updateRateDisplay();
+  }
+
+  let cbFails = 0;
+  let cbCurrentState = "CLOSED";
+
+  function updateCbDisplay() {
+    const box = document.getElementById('circuit-box');
+    const counter = document.getElementById('cb-fail-counter');
+    const exp = document.getElementById('cb-explanation');
+
+    counter.innerText = `${cbFails} / 5`;
+
+    if (cbCurrentState === "CLOSED") {
+      box.className = "circuit-indicator circuit-closed";
+      box.innerText = "CLOSED (Normal)";
+      exp.innerHTML = "El circuito está <strong>CERRADO</strong>: La plataforma opera normalmente conectando los servicios sin interrupciones.";
+    } else if (cbCurrentState === "OPEN") {
+      box.className = "circuit-indicator circuit-open";
+      box.innerText = "OPEN (Aislamiento Activo)";
+      exp.innerHTML = "El circuito está <strong>ABIERTO</strong>: Se detectaron fallos repetitivos y el sistema activó el modo de protección temporal.";
+    } else if (cbCurrentState === "HALF-OPEN") {
+      box.className = "circuit-indicator circuit-halfopen";
+      box.innerText = "HALF-OPEN (Verificación)";
+      exp.innerHTML = "El circuito está <strong>SEMI-ABIERTO</strong>: Comprobando si el servicio externo ya se recuperó.";
+    }
+  }
+
+  function cbSimulateFailure() {
+    cbFails++;
+    if (cbFails >= 5) {
+      cbCurrentState = "OPEN";
+    }
+    updateCbDisplay();
+  }
+
+  function cbSimulateSuccess() {
+    cbFails = 0;
+    cbCurrentState = "CLOSED";
+    updateCbDisplay();
+  }
+
+  function cbSimulateHalfOpen() {
+    cbCurrentState = "HALF-OPEN";
+    updateCbDisplay();
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Caches and virtual environments
+.venv/
+env/
+venv/
+ENV/
+.pytest_cache/
+
+# AWS SAM build artifacts
+.aws-sam/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Environment variables & secrets
+.env
+
+# Database files
+*.db
+
+# Extracted images (from docx processing)
+extracted_taller5_images/
+extracted_taller6_images/
+
+# OCR and extracted text
+taller_5_extracted_text.txt
+taller_5_images_ocr.txt
+taller_6_extracted_text.txt
+
+# IDE
+.vscode/
+
+# Antigravity
+.gga
+
