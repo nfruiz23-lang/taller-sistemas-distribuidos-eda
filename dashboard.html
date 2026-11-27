@@ -261,6 +261,24 @@
     .dot-occupied { background: #e11d48; }
     .dot-selected { background: #0284c7; }
 
+    /* Indicadores en calendario de días */
+    .calendar-day.day-full-occupied {
+      background: #fff1f2 !important;
+      border-color: #fecdd3 !important;
+      color: #be123c !important;
+    }
+    .calendar-day.day-full-occupied::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 6px;
+      height: 6px;
+      background: #e11d48;
+      border-radius: 50%;
+    }
+
     /* Calendario de Días */
     .calendar-grid {
       display: grid;
@@ -483,6 +501,35 @@
     .hidden {
       display: none !important;
     }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 768px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+    /* Días pasados: gris, no clicables */
+    .calendar-day.past {
+      background: #f1f5f9 !important;
+      color: #b0bec5 !important;
+      cursor: not-allowed !important;
+      opacity: 0.55;
+      border-color: #e2e8f0 !important;
+    }
+    .calendar-day.past:hover {
+      background: #f1f5f9 !important;
+      border-color: #e2e8f0 !important;
+    }
+    /* Hoy: borde azul destacado */
+    .calendar-day.today {
+      border: 2px solid #0284c7 !important;
+    }
   </style>
 </head>
 <body>
@@ -513,12 +560,7 @@
     <button class="tab-btn" id="btn-tab-ai" onclick="switchTab('tab-ai')">
       ✨ Asesor IA (Recomendador Inteligente)
     </button>
-    <button class="tab-btn" id="btn-tab-resilience" onclick="switchTab('tab-resilience')">
-      🛡️ Estabilidad & Conectividad
-    </button>
-    <button class="tab-btn" id="btn-tab-tests" onclick="switchTab('tab-tests')">
-      🧪 Pruebas del Sistema
-    </button>
+
   </div>
 
   <!-- ============================================================== -->
@@ -585,27 +627,27 @@
             <div class="calendar-day-header">Sáb</div>
             <div class="calendar-day-header">Dom</div>
 
-            <div class="calendar-day" onclick="selectDay(this, 17)">17</div>
-            <div class="calendar-day" onclick="selectDay(this, 18)">18</div>
-            <div class="calendar-day" onclick="selectDay(this, 19)">19</div>
-            <div class="calendar-day has-event" onclick="selectDay(this, 20)">20</div>
-            <div class="calendar-day active has-event" onclick="selectDay(this, 21)">21</div>
-            <div class="calendar-day" onclick="selectDay(this, 22)">22</div>
-            <div class="calendar-day" onclick="selectDay(this, 23)">23</div>
+            <div class="calendar-day past has-event" data-day="17" onclick="selectDay(this, 17)">17</div>
+            <div class="calendar-day past has-event" data-day="18" onclick="selectDay(this, 18)">18</div>
+            <div class="calendar-day past has-event" data-day="19" onclick="selectDay(this, 19)">19</div>
+            <div class="calendar-day past has-event" data-day="20" onclick="selectDay(this, 20)">20</div>
+            <div class="calendar-day past has-event" data-day="21" onclick="selectDay(this, 21)">21</div>
+            <div class="calendar-day past has-event" data-day="22" onclick="selectDay(this, 22)">22</div>
+            <div class="calendar-day past has-event" data-day="23" onclick="selectDay(this, 23)">23</div>
 
-            <div class="calendar-day" onclick="selectDay(this, 24)">24</div>
-            <div class="calendar-day has-event" onclick="selectDay(this, 25)">25</div>
-            <div class="calendar-day" onclick="selectDay(this, 26)">26</div>
-            <div class="calendar-day" onclick="selectDay(this, 27)">27</div>
-            <div class="calendar-day" onclick="selectDay(this, 28)">28</div>
-            <div class="calendar-day" onclick="selectDay(this, 29)">29</div>
-            <div class="calendar-day" onclick="selectDay(this, 30)">30</div>
+            <div class="calendar-day past has-event" data-day="24" onclick="selectDay(this, 24)">24</div>
+            <div class="calendar-day past has-event" data-day="25" onclick="selectDay(this, 25)">25</div>
+            <div class="calendar-day active today" data-day="26" onclick="selectDay(this, 26)">26<br><small style="font-size:9px;font-weight:800;color:#0284c7;letter-spacing:0.5px;">HOY</small></div>
+            <div class="calendar-day" data-day="27" onclick="selectDay(this, 27)">27</div>
+            <div class="calendar-day" data-day="28" onclick="selectDay(this, 28)">28</div>
+            <div class="calendar-day" data-day="29" onclick="selectDay(this, 29)">29</div>
+            <div class="calendar-day" data-day="30" onclick="selectDay(this, 30)">30</div>
           </div>
 
           <!-- Franjas Horarias con Estados Reales -->
           <div style="margin-top: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-              <label style="margin: 0;">Disponibilidad del Día <span id="label-selected-day">21 de Noviembre</span>:</label>
+              <label style="margin: 0;">Disponibilidad del Día <span id="label-selected-day">26 de Noviembre</span>:</label>
               <span style="font-size: 11px; color: var(--text-muted);">Haz clic para seleccionar o editar</span>
             </div>
             
@@ -637,7 +679,7 @@
             <div class="grid-2" style="gap: 12px;">
               <div class="form-group">
                 <label>Fecha Seleccionada:</label>
-                <input type="text" id="book-day-display" value="21 de Noviembre, 2026" readonly style="color: #0284c7; font-weight: bold; background: #f8fafc;">
+                <input type="text" id="book-day-display" value="26 de Noviembre, 2026" readonly style="color: #0284c7; font-weight: bold; background: #f8fafc;">
               </div>
               <div class="form-group">
                 <label>Hora de Inicio:</label>
@@ -1048,12 +1090,13 @@ Demostración en vivo (test_ai.py):
   ];
 
   let currentSpaceId = 1;
-  let selectedDayNum = 21;
+  let selectedDayNum = 26;
   let selectedSlotTime = "08:00 AM";
   let isEditMode = false;
 
   // Inicializar render de slots al cargar
   window.addEventListener('DOMContentLoaded', () => {
+    updateCalendarIndicators();
     renderTimeSlots();
     updateBookingTotal();
   });
@@ -1061,13 +1104,35 @@ Demostración en vivo (test_ai.py):
   function switchTab(tabId) {
     document.getElementById('tab-calendar').classList.add('hidden');
     document.getElementById('tab-ai').classList.add('hidden');
-    document.getElementById('tab-resilience').classList.add('hidden');
-    document.getElementById('tab-tests').classList.add('hidden');
 
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
 
     document.getElementById(tabId).classList.remove('hidden');
     document.getElementById('btn-' + tabId).classList.add('active');
+  }
+
+  // Actualizar indicadores (puntos rojos) en el calendario
+  function updateCalendarIndicators() {
+    const TODAY = 26;
+    const spaceData = availabilityData[currentSpaceId] || {};
+
+    document.querySelectorAll('.calendar-grid .calendar-day').forEach(el => {
+      const day = parseInt(el.getAttribute('data-day'));
+      if (!day) return;
+
+      if (day < TODAY) {
+        el.classList.add('has-event');
+        return;
+      }
+
+      const dayData = spaceData[day] || {};
+      const occupiedSlots = Object.values(dayData).filter(v => v === "occupied").length;
+      if (occupiedSlots > 0) {
+        el.classList.add('has-event');
+      } else {
+        el.classList.remove('has-event');
+      }
+    });
   }
 
   // Alternar Modo Edición
@@ -1114,6 +1179,7 @@ Demostración en vivo (test_ai.py):
     const names = { 1: "ESP001 - Sala Ejecutiva", 2: "ESP002 - Oficina Privada", 3: "ESP003 - Sala Conferencias" };
     document.getElementById('space-selected-badge').innerText = names[spaceId];
 
+    updateCalendarIndicators();
     renderTimeSlots();
     updateBookingTotal();
   }
@@ -1125,6 +1191,8 @@ Demostración en vivo (test_ai.py):
 
   // Seleccionar día
   function selectDay(element, dayNum) {
+    const TODAY = 26;
+    if (dayNum < TODAY) return; // Fechas pasadas no se pueden seleccionar
     document.querySelectorAll('.calendar-day').forEach(el => el.classList.remove('active'));
     element.classList.add('active');
     selectedDayNum = dayNum;
@@ -1138,12 +1206,14 @@ Demostración en vivo (test_ai.py):
     const container = document.getElementById('slots-container');
     container.innerHTML = "";
 
+    const TODAY = 26;
+    const isPastDay = selectedDayNum < TODAY;
     const spaceData = availabilityData[currentSpaceId] || {};
     const dayData = spaceData[selectedDayNum] || {};
 
     timeSlotsList.forEach(slot => {
-      const isOccupied = (dayData[slot.time] === "occupied");
-      const isSelected = (slot.time === selectedSlotTime);
+      const isOccupied = isPastDay || (dayData[slot.time] === "occupied");
+      const isSelected = !isPastDay && (slot.time === selectedSlotTime);
 
       const div = document.createElement('div');
       div.className = `time-slot ${isOccupied ? 'time-slot-occupied' : 'time-slot-available'} ${isSelected ? 'time-slot-selected' : ''}`;
@@ -1177,6 +1247,7 @@ Demostración en vivo (test_ai.py):
       } else {
         availabilityData[currentSpaceId][selectedDayNum][timeStr] = "occupied";
       }
+      updateCalendarIndicators();
       renderTimeSlots();
     } else {
       // Modo usuario: seleccionar horario
@@ -1187,9 +1258,11 @@ Demostración en vivo (test_ai.py):
   }
 
   function updateSlotStatusUI() {
+    const TODAY = 26;
+    const isPastDay = selectedDayNum < TODAY;
     const spaceData = availabilityData[currentSpaceId] || {};
     const dayData = spaceData[selectedDayNum] || {};
-    const isOccupied = (dayData[selectedSlotTime] === "occupied");
+    const isOccupied = isPastDay || (dayData[selectedSlotTime] === "occupied");
 
     const box = document.getElementById('slot-status-box');
     const confirmBtn = document.getElementById('btn-confirm-booking');
@@ -1198,11 +1271,15 @@ Demostración en vivo (test_ai.py):
       box.style.background = "#fff1f2";
       box.style.borderColor = "#fecdd3";
       box.style.color = "#be123c";
-      box.innerHTML = `<span>● Estado: <strong>Horario Ocupado (No disponible)</strong></span><span class="badge badge-rose">Ocupado</span>`;
+      box.innerHTML = isPastDay
+        ? `<span>● Estado: <strong>Fecha en el pasado</strong></span><span class="badge badge-rose">No disponible</span>`
+        : `<span>● Estado: <strong>Horario Ocupado (No disponible)</strong></span><span class="badge badge-rose">Ocupado</span>`;
       confirmBtn.disabled = true;
       confirmBtn.style.opacity = "0.5";
       confirmBtn.style.cursor = "not-allowed";
-      confirmBtn.innerHTML = `<span>⛔</span> Horario Ocupado - Elige otra hora`;
+      confirmBtn.innerHTML = isPastDay
+        ? `<span>⛔</span> Fecha pasada - No se puede reservar`
+        : `<span>⛔</span> Horario Ocupado - Elige otra hora`;
     } else {
       box.style.background = "#f0fdf4";
       box.style.borderColor = "#bbf7d0";
@@ -1260,7 +1337,8 @@ Demostración en vivo (test_ai.py):
     const totalCount = tbody.children.length;
     document.getElementById('booking-badge-count').innerText = `${totalCount} Reservas Activas`;
 
-    // Refrescar la cuadrícula de horas
+    // Refrescar la cuadrícula de horas e indicadores
+    updateCalendarIndicators();
     renderTimeSlots();
 
     alert(`🎉 ¡Reserva Agendada y Horario Bloqueado!\n\nEspacio: ${spaceName}\nFecha: ${selectedDayNum} Noviembre, 2026 - ${selectedSlotTime}\nDuración: ${hours} horas\nTotal: $${total.toLocaleString()} COP\n\nEl horario '${selectedSlotTime}' ahora aparece en ROJO (Ocupado).`);
@@ -1281,6 +1359,7 @@ Demostración en vivo (test_ai.py):
       const totalCount = document.getElementById('bookings-tbody').children.length;
       document.getElementById('booking-badge-count').innerText = `${totalCount} Reservas Activas`;
 
+      updateCalendarIndicators();
       renderTimeSlots();
       alert(`✔ Horario liberado: Ahora el horario de las ${slot} está nuevamente DISPONIBLE en verde.`);
     }
